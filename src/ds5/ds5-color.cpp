@@ -45,9 +45,9 @@ namespace librealsense
         {
             return get_raw_calibration_table(rgb_calibration_id);
         };
-
+		
         //for al3d
-        if ((_pid == ds::AL3D_PID )||(_pid == ds::AL3Di_PID ))
+        if ((_pid == ds::AL3D_PID )||(_pid == ds::AL3Di_PID ) || (_pid == ds::AL3D_iTOF_PID) || (_pid == ds::AL3Di_iTOF_PID))
             _color_extrinsic = std::make_shared<lazy<rs2_extrinsics>>([this]() { return from_pose(get_color_stream_extrinsic_al3d(*_color_calib_table_raw)); });
         else
             _color_extrinsic = std::make_shared<lazy<rs2_extrinsics>>([this]() { return from_pose(get_color_stream_extrinsic(*_color_calib_table_raw)); });
@@ -60,11 +60,11 @@ namespace librealsense
         // and it will then been found in end point 0 (the depth's one)
         auto color_devs_info_mi3 = filter_by_mi(group.uvc_devices, 3);
        
-        
+		
        
        #if 1
 	    auto color_devs_info_mi2 = filter_by_mi(group.uvc_devices, 2);  
-        if (((_pid == ds::AL3D_PID) || (_pid == ds::AL3Di_PID ))&& color_devs_info_mi2.size() == 1) 
+        if (((_pid == ds::AL3D_PID) || (_pid == ds::AL3Di_PID ) || (_pid == ds::AL3D_iTOF_PID) || (_pid == ds::AL3Di_iTOF_PID))&& color_devs_info_mi2.size() == 1)
 	   #else //for al3d
         if(0)
 	   #endif		
@@ -304,10 +304,10 @@ namespace librealsense
             color_ep.register_processing_block(processing_block_factory::create_id_pbf(RS2_FORMAT_MJPEG, RS2_STREAM_COLOR));
         } 
 
-
+		
 
         //for al3d ai, fw must >= 0.0.2.98
-        if ((_pid == ds::AL3D_PID) || (_pid == ds::AL3Di_PID))
+        if ((_pid == ds::AL3D_PID) || (_pid == ds::AL3Di_PID) || (_pid == ds::AL3D_iTOF_PID) || (_pid == ds::AL3Di_iTOF_PID))
         {
             if (_recommended_fw_version >= firmware_version("0.0.2.98"))
             {
@@ -334,8 +334,8 @@ namespace librealsense
     {
    
         auto str_pid = _owner->_pid;
-
-        if ((str_pid == ds::AL3D_PID)||(str_pid == ds::AL3Di_PID))
+		
+        if ((str_pid == ds::AL3D_PID)||(str_pid == ds::AL3Di_PID) || (str_pid == ds::AL3D_iTOF_PID) || (str_pid == ds::AL3Di_iTOF_PID))
         {
             return get_intrinsic_by_resolution_al3d(
                 *_owner->_color_calib_table_raw,
@@ -400,9 +400,9 @@ namespace librealsense
 
     void  ds5_color_sensor::open(const stream_profiles& requests) 
     {
-       
+		
         //for al3d ai
-        if ((_owner->_pid == ds::AL3D_PID) || (_owner->_pid == ds::AL3Di_PID))
+        if ((_owner->_pid == ds::AL3D_PID) || (_owner->_pid == ds::AL3Di_PID) || (_owner->_pid == ds::AL3D_iTOF_PID) || (_owner->_pid == ds::AL3Di_iTOF_PID))
         {
             if (_owner->_recommended_fw_version >= firmware_version("0.0.2.98"))
             {
@@ -428,8 +428,8 @@ namespace librealsense
 
     void  ds5_color_sensor::close() 
     {
-        synthetic_sensor::close();
-        if ((_owner->_pid == ds::AL3D_PID) || (_owner->_pid == ds::AL3Di_PID))
+        synthetic_sensor::close(); 
+        if ((_owner->_pid == ds::AL3D_PID) || (_owner->_pid == ds::AL3Di_PID) || (_owner->_pid == ds::AL3D_iTOF_PID) || (_owner->_pid == ds::AL3Di_iTOF_PID))
         {
             if (_owner->_recommended_fw_version >= firmware_version("0.0.2.98"))
             {

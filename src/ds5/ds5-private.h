@@ -35,6 +35,8 @@ namespace librealsense
         const uint16_t RS420_PID            = 0x0af6; // PWG
         const uint16_t AL3D_PID             = 0x99aa; // AL3D //for al3d
         const uint16_t AL3Di_PID            = 0x99bb; // AL3Di //for al3di
+		const uint16_t AL3D_iTOF_PID		= 0x99c0; // AL3D_iTOF_PID //for al3d
+		const uint16_t AL3Di_iTOF_PID		= 0x99c1; // AL3Di_iTOF_PID //for al3di
         const uint16_t RS420_MM_PID         = 0x0afe; // PWGT
         const uint16_t RS410_MM_PID         = 0x0aff; // ASRT
         const uint16_t RS400_MM_PID         = 0x0b00; // PSR
@@ -78,6 +80,8 @@ namespace librealsense
             ds::RS420_PID,
             ds::AL3D_PID, //for al3d
             ds::AL3Di_PID, //for al3d
+			ds::AL3D_iTOF_PID, //for al3d
+			ds::AL3Di_iTOF_PID, //for al3d
             ds::RS420_MM_PID,
             ds::RS410_MM_PID,
             ds::RS400_MM_PID,
@@ -147,6 +151,8 @@ namespace librealsense
             { RS420_PID,            "Intel RealSense D420"}, 
             { AL3D_PID,             "Altek 3D UVC Camera"}, // for al3d
             { AL3Di_PID,            "Altek 3Di UVC Camera"}, // for al3di
+			{ AL3D_iTOF_PID,        "Altek iTOF UVC Camera"}, // for al3d
+			{ AL3Di_iTOF_PID,       "Altek iTOF Gyro UVC Camera"}, // for al3di
             { RS420_MM_PID,         "Intel RealSense D420 with Tracking Module"},
             { RS410_MM_PID,         "Intel RealSense D410 with Tracking Module"},
             { RS400_MM_PID,         "Intel RealSense D400 with Tracking Module"},
@@ -754,6 +760,8 @@ namespace librealsense
             {RS420_PID, "5.8.15.0"},
 			{AL3D_PID, "5.8.15.0"}, //for al3d
 			{AL3Di_PID, "5.8.15.0"}, //for al3di
+			{AL3D_iTOF_PID, "5.8.15.0"}, //for al3d
+			{AL3Di_iTOF_PID, "5.8.15.0"}, //for al3di
             {RS420_MM_PID, "5.8.15.0"},
             {RS410_MM_PID, "5.8.15.0"},
             {RS400_MM_PID, "5.8.15.0" },

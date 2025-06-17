@@ -84,7 +84,7 @@ namespace librealsense
         {rs_fourcc('Z','1','6',' '), RS2_STREAM_DEPTH},
 		{rs_fourcc('A','L','2','4'), RS2_STREAM_DEPTH},
 		{rs_fourcc('A','L','3','2'), RS2_STREAM_DEPTH},        
-        {rs_fourcc('Z','1','6','H'), RS2_STREAM_DEPTH},
+        {rs_fourcc('Z','1','6','H'), RS2_STREAM_DEPTH}
         {rs_fourcc('B','Y','R','2'), RS2_STREAM_COLOR},
         {rs_fourcc('M','J','P','G'), RS2_STREAM_COLOR}
     };
@@ -515,7 +515,8 @@ namespace librealsense
             }
             else 
             {
-                if ((_owner->_pid == ds::AL3D_PID)||(_owner->_pid == ds::AL3Di_PID))
+				
+                if ((_owner->_pid == ds::AL3D_PID)||(_owner->_pid == ds::AL3Di_PID) || (_owner->_pid == ds::AL3D_iTOF_PID) || (_owner->_pid == ds::AL3Di_iTOF_PID))
                     return get_intrinsic_by_resolution_al3d(
                         *_owner->_coefficients_table_raw,
                         ds::calibration_table_id::coefficients_table_id,
@@ -779,8 +780,8 @@ namespace librealsense
     float ds5_device::get_stereo_baseline_mm() const
     {
         using namespace ds;
-
-        if ((_pid == ds::AL3D_PID)||(_pid == ds::AL3Di_PID))   //al3d
+		
+        if ((_pid == ds::AL3D_PID)||(_pid == ds::AL3Di_PID) || (_pid == ds::AL3D_iTOF_PID) || (_pid == ds::AL3Di_iTOF_PID))   //al3d
         {
             auto table = check_calib<coefficients_table_al>(*_coefficients_table_raw);
             auto al_baseline = table->al_cvbin.ucOpenCV_rec_384.ucOpenCV_rec_328.m_eBaseline;
@@ -802,8 +803,8 @@ namespace librealsense
 
     std::vector<uint8_t> ds5_device::get_new_calibration_table() const
     {
-     
-        if ((_fw_version >= firmware_version("5.11.9.5"))&& ((_pid != ds::AL3D_PID)&&(_pid != ds::AL3Di_PID))) //for al3d
+		
+        if ((_fw_version >= firmware_version("5.11.9.5"))&& ((_pid != ds::AL3D_PID)&&(_pid != ds::AL3Di_PID) && (_pid != ds::AL3D_iTOF_PID) && (_pid != ds::AL3Di_iTOF_PID))) //for al3d
         {
             command cmd(ds::RECPARAMSGET);
             return _hw_monitor->send(cmd);
@@ -934,7 +935,7 @@ namespace librealsense
         // Reference CS - Right-handed; positive [X,Y,Z] point to [Left,Up,Forward] accordingly.
         _left_right_extrinsics = std::make_shared<lazy<rs2_extrinsics>>([this]()
             {
-                if ((_pid == ds::AL3D_PID)||(_pid == ds::AL3Di_PID))   //al3d
+                if ((_pid == ds::AL3D_PID)||(_pid == ds::AL3Di_PID) || (_pid == ds::AL3D_iTOF_PID) || (_pid == ds::AL3Di_iTOF_PID))   //al3d
                 {
                     rs2_extrinsics ext = identity_matrix();
                     auto table = check_calib<coefficients_table_al>(*_coefficients_table_raw);
@@ -969,8 +970,8 @@ namespace librealsense
         _hw_monitor->get_gvd(gvd_buff.size(), gvd_buff.data(), GVD);
 
         std::string optic_serial_str;
-        std::string asic_serial_str;
-        if ((_pid == ds::AL3D_PID)||(_pid == ds::AL3Di_PID))   //al3d
+        std::string asic_serial_str; 
+        if ((_pid == ds::AL3D_PID)||(_pid == ds::AL3Di_PID) || (_pid == ds::AL3D_iTOF_PID) || (_pid == ds::AL3Di_iTOF_PID))   //al3d
         {
             optic_serial_str = _hw_monitor->get_module_serial_string(gvd_buff, module_serial_offset, 32);;
             asic_serial_str = _hw_monitor->get_module_serial_string(gvd_buff, module_serial_offset,32);
@@ -1048,7 +1049,7 @@ namespace librealsense
             []() {return std::make_shared<y12i_to_y16y16>(); }
         );
 		
-		if ((_pid == ds::AL3D_PID)||(_pid == ds::AL3Di_PID))//al3d
+		if ((_pid == ds::AL3D_PID)||(_pid == ds::AL3Di_PID) || (_pid == ds::AL3D_iTOF_PID) || (_pid == ds::AL3Di_iTOF_PID))//al3d
 		{
 			depth_sensor.register_processing_block(
 				{ { RS2_FORMAT_AL24 } },
@@ -1319,8 +1320,8 @@ namespace librealsense
             depth_sensor.register_option(RS2_OPTION_AUTO_EXPOSURE_LIMIT, std::make_shared<auto_exposure_limit_option>(*_hw_monitor, &depth_sensor, exposure_range));
             depth_sensor.register_option(RS2_OPTION_AUTO_GAIN_LIMIT, std::make_shared<auto_gain_limit_option>(*_hw_monitor, &depth_sensor, gain_range));
         }
-
-		if ((_pid == AL3D_PID)||(_pid == AL3Di_PID)) 
+		
+		if ((_pid == AL3D_PID)||(_pid == AL3Di_PID) || (_pid == AL3D_iTOF_PID) || (_pid == AL3Di_iTOF_PID))
 		{
 			if (_recommended_fw_version >= firmware_version("0.0.2.62"))
 			{
@@ -1461,8 +1462,8 @@ namespace librealsense
                             >> md_configuration::SUB_PRESET_BIT_OFFSET_ID;
                     }));
         }
-
-		if ((_pid == AL3D_PID) || (_pid == AL3Di_PID))
+		
+		if ((_pid == AL3D_PID) || (_pid == AL3Di_PID) || (_pid == AL3D_iTOF_PID) || (_pid == AL3Di_iTOF_PID))
 		{
 			if (_al3d_fw_version >= firmware_version("0.0.2.106"))
 			{
@@ -1483,8 +1484,8 @@ namespace librealsense
         register_info(RS2_CAMERA_INFO_NAME, device_name);
         register_info(RS2_CAMERA_INFO_SERIAL_NUMBER, optic_serial);
         register_info(RS2_CAMERA_INFO_ASIC_SERIAL_NUMBER, asic_serial);
-
-        if ((_pid == AL3D_PID)||(_pid == AL3Di_PID)) //if (_pid == RBEYE_PID)  //al3d fw update
+		
+        if ((_pid == AL3D_PID)||(_pid == AL3Di_PID) || (_pid == AL3D_iTOF_PID) || (_pid == AL3Di_iTOF_PID)) //al3d fw update
         {
             register_info(RS2_CAMERA_INFO_FIRMWARE_UPDATE_ID, optic_serial);
         }
@@ -1498,8 +1499,8 @@ namespace librealsense
         register_info(RS2_CAMERA_INFO_DEBUG_OP_CODE, std::to_string(static_cast<int>(fw_cmd::GLD)));
         register_info(RS2_CAMERA_INFO_ADVANCED_MODE, ((advanced_mode) ? "YES" : "NO"));
         register_info(RS2_CAMERA_INFO_PRODUCT_ID, pid_hex_str);
-
-        //if ((_pid == AL3D_PID) ||(_pid == AL3Di_PID) )
+		
+        //if ((_pid == AL3D_PID) ||(_pid == AL3Di_PID) ||(_pid == AL3D_iTOF_PID)||(_pid == AL3Di_iTOF_PID))
         //{
         //    register_info(RS2_CAMERA_INFO_PRODUCT_LINE, "AL3D");
         //}
@@ -1514,10 +1515,12 @@ namespace librealsense
             register_info(RS2_CAMERA_INFO_USB_TYPE_DESCRIPTOR, usb_type_str);
 
         std::string curr_version= _fw_version;
-
+		
        if (
            ((_pid == AL3D_PID)  && (_al3d_fw_version >= firmware_version("0.0.1.147"))) || 
-           ((_pid == AL3Di_PID) && (_al3d_fw_version >= firmware_version("0.0.1.192")))
+           ((_pid == AL3Di_PID) && (_al3d_fw_version >= firmware_version("0.0.1.192"))) ||
+		   ((_pid == AL3D_iTOF_PID)) ||
+		   ((_pid == AL3Di_iTOF_PID)) 
           ) //al3d sync pts time
        {
             
@@ -1550,7 +1553,9 @@ namespace librealsense
 #if 1 //al3d: if you want to do sw sync.. enable this
        if (
            ((_pid == AL3D_PID) && (_al3d_fw_version >= firmware_version("0.0.1.151"))) ||
-           ((_pid == AL3Di_PID) && (_al3d_fw_version >= firmware_version("0.0.1.206")))
+           ((_pid == AL3Di_PID) && (_al3d_fw_version >= firmware_version("0.0.1.206"))) ||
+		   (_pid == AL3D_iTOF_PID) ||
+		   (_pid == AL3Di_iTOF_PID)
            ) //al3d sync pts time
 #else
        if(0)
@@ -1591,7 +1596,7 @@ namespace librealsense
 	{
 		uint32_t err_code_0 = 0, err_code_1 = 0;
 
-		if ((_pid == 0x99AA)||(_pid == 0x99BB))
+		if ((_pid == 0x99AA)||(_pid == 0x99BB) || (_pid == 0x99C0) || (_pid == 0x99C1))
 		{		
 		   	if (_al3d_fw_version >= firmware_version("0.0.1.261"))
 			{
@@ -1619,7 +1624,7 @@ namespace librealsense
 	{
 		bool ret = true;
 
-		if ((_pid == 0x99AA)||(_pid == 0x99BB))
+		if ((_pid == 0x99AA) || (_pid == 0x99BB) || (_pid == 0x99C0) || (_pid == 0x99C1))
 		{	
 			command cmd(ds::fw_cmd::SET_AL3D_PARAM, p1, p2, p3, p4);
 			_al3d_ret.clear();

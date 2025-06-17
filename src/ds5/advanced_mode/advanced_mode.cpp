@@ -104,6 +104,8 @@ namespace librealsense
             case ds::RS420_PID:
 			case ds::AL3D_PID: // for al3d
 			case ds::AL3Di_PID:
+			case ds::AL3D_iTOF_PID: // for al3d
+			case ds::AL3Di_iTOF_PID:
                 default_420(p);
                 break;
             default:

@@ -2365,7 +2365,7 @@ namespace rs2
             std::string pid = dev->dev.get_info(RS2_CAMERA_INFO_PRODUCT_ID);
             if (dev->s->supports(RS2_OPTION_AL3D_AI_Enable)) 
             {
-                if (dev->s->get_option(RS2_OPTION_AL3D_AI_Enable)&& ((pid == "99AA") || (pid == "99BB")) && (f.get_profile().stream_type() == RS2_STREAM_COLOR))
+                if (dev->s->get_option(RS2_OPTION_AL3D_AI_Enable)&& ((pid == "99AA") || (pid == "99BB") || (pid == "99C0") || (pid == "99C1")) && (f.get_profile().stream_type() == RS2_STREAM_COLOR))
                     show_ai_result = 1;
             }
           
@@ -5343,7 +5343,7 @@ namespace rs2
             std::string(s->get_info(RS2_CAMERA_INFO_PRODUCT_LINE)) == "D400" : false;
 
         std::string pidstr = dev.get_info(RS2_CAMERA_INFO_PRODUCT_ID);
-        bool is_al_roboteye = ((pidstr == "99AA") || (pidstr == "99BB")) ? true : false;// (dev.get_info(RS2_CAMERA_INFO_PRODUCT_ID) == "99AA") ? true : false;
+        bool is_al_roboteye = ((pidstr == "99AA") || (pidstr == "99BB") || (pidstr == "99C0") || (pidstr == "99C1")) ? true : false;// (dev.get_info(RS2_CAMERA_INFO_PRODUCT_ID) == "99AA") ? true : false;
 
         std::string fw_version = s->supports(RS2_CAMERA_INFO_FIRMWARE_VERSION) ?
             s->get_info(RS2_CAMERA_INFO_FIRMWARE_VERSION) : "";
@@ -6587,7 +6587,7 @@ namespace rs2
 		
 		std::string pid = dev.get_info(RS2_CAMERA_INFO_PRODUCT_ID);
 
-		if ((pid == "99AA")||(pid == "99BB"))
+		if ((pid == "99AA")||(pid == "99BB") || (pid == "99C0") || (pid == "99C1"))
 		{	
 			bool ip_supports =	dev.supports(RS2_CAMERA_INFO_IP_ADDRESS);
 
@@ -6616,7 +6616,7 @@ namespace rs2
 
         std::string pid = dev.get_info(RS2_CAMERA_INFO_PRODUCT_ID);
 
-        if ((pid == "99AA") || (pid == "99BB"))
+		if ((pid == "99AA") || (pid == "99BB") || (pid == "99C0") || (pid == "99C1"))
         {
             for (auto&& sub : subdevices)
             {
@@ -6924,7 +6924,7 @@ namespace rs2
                         auto is_comb_supported = sub->is_selected_combination_supported();
                         bool can_stream = false;
 
-						if ((pid == "99AA")||(pid == "99BB"))
+						if ((pid == "99AA") || (pid == "99BB") || (pid == "99C0") || (pid == "99C1"))
 						{
 							if(al3di_is_rgb_streaming)
 							{
@@ -6974,7 +6974,7 @@ namespace rs2
                                 }
                             }
                         }
-						if ((pid == "99AA")||(pid == "99BB"))
+						if ((pid == "99AA") || (pid == "99BB") || (pid == "99C0") || (pid == "99C1"))
 						{
 							if(al3di_disable_rgb == true)
 							{
@@ -7014,7 +7014,7 @@ namespace rs2
                                     _update_readonly_options_timer.set_expired();
                                     sub->play(profiles, viewer, dev_syncer);
 
-									if ((pid == "99AA")||(pid == "99BB"))
+									if ((pid == "99AA") || (pid == "99BB") || (pid == "99C0") || (pid == "99C1"))
 									{	
 										if(profiles[0].stream_type() == RS2_STREAM_COLOR)
 										{
@@ -7068,7 +7068,7 @@ namespace rs2
                             {
                                 viewer.synchronization_enable = viewer.synchronization_enable_prev_state.load();
                             }
-							if ((pid == "99AA")||(pid == "99BB"))
+							if ((pid == "99AA") || (pid == "99BB") || (pid == "99C0") || (pid == "99C1"))
 							{
 								if (friendly_name == "Stereo Module")
 								{

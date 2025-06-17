@@ -624,8 +624,8 @@ namespace librealsense
     {
         for (auto&& info : devices)
         {
-            #if 1 //for al3d
-			if((info.pid == ds::AL3D_PID)||(info.pid == ds::AL3Di_PID))
+            #if 1 //for al3d 
+			if((info.pid == ds::AL3D_PID)||(info.pid == ds::AL3Di_PID) || (info.pid == ds::AL3D_iTOF_PID) || (info.pid == ds::AL3Di_iTOF_PID))
 			{
 #if 0
                 //mi = 2;
@@ -658,8 +658,9 @@ namespace librealsense
         std::vector<platform::uvc_device_info> results;
         for (auto&& info : devices)
         {
+			
 			#if 1 // for al3d
-			if((info.pid == ds::AL3D_PID)||(info.pid == ds::AL3Di_PID))
+			if((info.pid == ds::AL3D_PID)||(info.pid == ds::AL3Di_PID) || (info.pid == ds::AL3D_iTOF_PID) || (info.pid == ds::AL3Di_iTOF_PID))
 			{
 #if 0  
 				//mi = 2;

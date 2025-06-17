@@ -365,7 +365,11 @@ void updateExtrinsicsMap(rs2_video_stream videoStream, std::string extrinsics_st
         // hanle NaN values
         if (params_count != SDP_EXTRINSICS_ARGS)
         {
-            extrinsics = {{NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN}, {NAN, NAN, NAN}};
+#if 0
+            extrinsics = {{NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN, NAN},{NAN, NAN, NAN}};
+#else
+			extrinsics = { {0, 0, 0, 0, 0, 0, 0, 0, 0},{0, 0, 0} };
+#endif
         }
 
         minimal_extrinsics_map[std::make_pair(RsRTSPClient::getPhysicalSensorUniqueKey(videoStream.type, videoStream.index), target_sensor)] = extrinsics;

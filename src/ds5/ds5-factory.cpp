@@ -1153,7 +1153,11 @@ namespace librealsense
 		case AL3D_PID: // for al3d
             return std::make_shared<al3D_device>(ctx, group, register_device_notifications);	
 		case AL3Di_PID: // for al3di
-            return std::make_shared<al3Di_device>(ctx, group, register_device_notifications);				
+            return std::make_shared<al3Di_device>(ctx, group, register_device_notifications);	
+		case AL3D_iTOF_PID: // for al3d
+			return std::make_shared<al3D_device>(ctx, group, register_device_notifications);
+		case AL3Di_iTOF_PID: // for al3di
+			return std::make_shared<al3Di_device>(ctx, group, register_device_notifications);
         case RS420_MM_PID:
             return std::make_shared<rs420_mm_device>(ctx, group, register_device_notifications);
         case RS430_PID:
@@ -1235,11 +1239,12 @@ namespace librealsense
 #endif
 			for (auto&& info : devices)  //for al3d
 			{
-				if((info.pid == ds::AL3D_PID))
+				
+				if((info.pid == ds::AL3D_PID)|| (info.pid == ds::AL3D_iTOF_PID))
 				{
 					all_sensors_present = true;
 				}
-				else if ((info.pid == ds::AL3Di_PID))
+				else if ((info.pid == ds::AL3Di_PID)|| (info.pid == ds::AL3Di_iTOF_PID))
 				{
 					if (is_device_hid_sensor && hids.size() >= 2)
 					{
