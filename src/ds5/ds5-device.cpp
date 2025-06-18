@@ -84,7 +84,7 @@ namespace librealsense
         {rs_fourcc('Z','1','6',' '), RS2_STREAM_DEPTH},
 		{rs_fourcc('A','L','2','4'), RS2_STREAM_DEPTH},
 		{rs_fourcc('A','L','3','2'), RS2_STREAM_DEPTH},        
-        {rs_fourcc('Z','1','6','H'), RS2_STREAM_DEPTH}
+        {rs_fourcc('Z','1','6','H'), RS2_STREAM_DEPTH},
         {rs_fourcc('B','Y','R','2'), RS2_STREAM_COLOR},
         {rs_fourcc('M','J','P','G'), RS2_STREAM_COLOR}
     };
